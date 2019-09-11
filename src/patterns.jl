@@ -1,0 +1,8 @@
+const DATE_PATTERN = r"^([0-3][0-9])([0-1][0-9])([0-9]{2})$"
+const TIME_PATTERN = r"^([0-2][0-9])([0-5][0-9])([0-5][0-9])$"
+# const DATETIME_PATTERN = r"^([0-3][0-9])([0-1][0-9])([0-9]{2}) ([0-2][0-9])([0-5][0-9])([0-5][0-9])$"
+
+# const THREE_LETTER_CODE_PATTERN = r"^[A-Z0-9]{3}$"
+# const MANUFACTURER_CODE_PATTERN = THREE_LETTER_CODE_PATTERN
+# const LOGGER_ID_PATTERN = THREE_LETTER_CODE_PATTERN
+# const EXTENSION_CODE_PATTERN = THREE_LETTER_CODE_PATTERN
