@@ -1,6 +1,6 @@
 module IGC
 
-import Base: parse
+import Base: parse, string
 using Dates
 
 const IGC_TIME_FMT = "HHMMSS"
@@ -9,7 +9,7 @@ const IGC_TIME_FMT = "HHMMSS"
 struct IGCDate
     val::Date
 end
-IGCDate(y, m, d) = new(Date(y, m, d))
+IGCDate(y, m, d) = IGCDate(Date(y, m, d))
 
 struct IGCTime
     val::Time
@@ -90,8 +90,13 @@ function parse(::Type{IGCTime}, s::String)
 end
 
 function parse(::Type{IGCDate}, s::String)
-    return IGCDate(Date(2000 + parse(Int, s[5:6]), parse(Int, s[3:4]), parse(Int, s[1:2])))
+    d = parse(Int, s[1:2])
+    m = parse(Int, s[3:4])
+    y = 2000 + parse(Int, s[5:6])
+    return IGCDate(Date(y, m, d))
 end
+
+string(d::IGCDate) = Dates.format(d.val, "ddmmyy")
 
 function parse(::Type{IGCLatitude}, s::String)
     d = parse(Int64, s[1:2])

@@ -40,6 +40,8 @@ using Dates
 
     @testset "parse date" begin
         s = "200819"
-        @test parse(IGCDate, s).val == Date(2019, 8, 20)
+        igc_date = parse(IGCDate, s)
+        @test igc_date.val == Date(2019, 8, 20)
+        @test string(igc_date) == s
     end
 end
