@@ -1,7 +1,8 @@
 using IGC
 using Test
-import IGC: IGCLatitude, IGCLongitude, IGCTime, IGCFixValidity, IGCPressureAltitude, IGCGpsAltitude
+import IGC: IGCLatitude, IGCLongitude, IGCDate, IGCTime, IGCFixValidity, IGCPressureAltitude, IGCGpsAltitude
 import IGC: A_record, B_record
+using Dates
 
 @testset "IGC.jl" begin
     # Write your own tests here.
@@ -35,5 +36,10 @@ import IGC: A_record, B_record
             "19509020"
         )
         @test parse(B_record, line) == expected_result
+    end
+
+    @testset "parse date" begin
+        s = "200819"
+        @test parse(IGCDate, s).val == Date(2019, 8, 20)
     end
 end

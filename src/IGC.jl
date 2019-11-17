@@ -1,14 +1,20 @@
 module IGC
 
 import Base: parse
-using Dates: Time
+using Dates
 
 const IGC_TIME_FMT = "HHMMSS"
+
+
+struct IGCDate
+    val::Date
+end
+IGCDate(y, m, d) = new(Date(y, m, d))
 
 struct IGCTime
     val::Time
 end
-IGCTime(h, mi, s) = IGCTime(Time(h, mi, s))
+IGCTime(h, mi, s) = IGCTime(Dates.Time(h, mi, s))
 
 struct IGCLatitude
     val::Float64
@@ -50,7 +56,7 @@ end
 function parse(::Type{A_record}, line::String)
     @assert line[1] == 'A'
     id_addition = length(line) == 7 ? "" : strip(line[8:end])
-    A_record(line[2:4], line[5:7], id_addition)
+    return A_record(line[2:4], line[5:7], id_addition)
 end
 
 struct B_record <: Abstract_IGC_Record
@@ -67,7 +73,7 @@ end
 function parse(::Type{B_record}, line::String)
     @assert line[1] == 'B'
 
-    B_record(
+    return B_record(
         parse(IGCTime, line[2:7]),
         parse(IGCLatitude, line[8:15]),
         parse(IGCLongitude, line[16:24]),
@@ -80,7 +86,11 @@ function parse(::Type{B_record}, line::String)
 end
 
 function parse(::Type{IGCTime}, s::String)
-    IGCTime(Time(s, IGC_TIME_FMT))
+    return IGCTime(Time(s, IGC_TIME_FMT))
+end
+
+function parse(::Type{IGCDate}, s::String)
+    return IGCDate(Date(2000 + parse(Int, s[5:6]), parse(Int, s[3:4]), parse(Int, s[1:2])))
 end
 
 function parse(::Type{IGCLatitude}, s::String)
@@ -102,7 +112,7 @@ function parse(::Type{IGCLatitude}, s::String)
         latitude = -latitude
     end
 
-    IGCLatitude(latitude)
+    return IGCLatitude(latitude)
 end
 
 function parse(::Type{IGCLongitude}, s::String)
@@ -124,15 +134,15 @@ function parse(::Type{IGCLongitude}, s::String)
         longitude = -longitude
     end
 
-    IGCLongitude(longitude)
+    return IGCLongitude(longitude)
 end
 
 function parse(::Type{IGCPressureAltitude}, s::String)
-    IGCPressureAltitude(parse(Int, s))
+    return IGCPressureAltitude(parse(Int, s))
 end
 
 function parse(::Type{IGCGpsAltitude}, s::String)
-    IGCGpsAltitude(parse(Int, s))
+    return IGCGpsAltitude(parse(Int, s))
 end
 
 end # module
