@@ -2,6 +2,8 @@ using IGC
 using Test
 import IGC: IGCLatitude, IGCLongitude, IGCDate, IGCTime, IGCFixValidity, IGCPressureAltitude, IGCGpsAltitude
 import IGC: A_record, B_record
+import IGC: read_igc_file
+
 using Dates
 
 @testset "IGC.jl" begin
@@ -23,6 +25,20 @@ using Dates
         @test parse(A_record, line) == expected_result
     end
 
+    @testset "parse time" begin
+        s = "160245"
+        igc_time = parse(IGCTime, s)
+        @test igc_time.val == Time(16, 2, 45)
+        @test string(igc_time) == s
+    end
+            
+    @testset "parse date" begin
+        s = "200819"
+        igc_date = parse(IGCDate, s)
+        @test igc_date.val == Date(2019, 8, 20)
+        @test string(igc_date) == s
+    end
+
     @testset "parse B record" begin
         line = "B1602455107126N00149300WA002880042919509020\r\n"
         expected_result = B_record(
@@ -38,10 +54,15 @@ using Dates
         @test parse(B_record, line) == expected_result
     end
 
-    @testset "parse date" begin
-        s = "200819"
-        igc_date = parse(IGCDate, s)
-        @test igc_date.val == Date(2019, 8, 20)
-        @test string(igc_date) == s
+    @testset "read igc file" begin
+        igcdoc = read_igc_file(joinpath("data", "example.igc"))
+        @test length(igcdoc.B_records) == 9
+        for err in igcdoc.errors
+            # println(err)
+            showerror(stdout, err); println()
+        end
+        # @test length(igcdoc.errors) == 0  # when every line will be parsed correctly
     end
+    
+    
 end
