@@ -2,6 +2,7 @@ using IGC
 using Test
 import IGC: IGCLatitude, IGCLongitude, IGCDate, IGCTime, IGCFixValidity, IGCPressureAltitude, IGCGpsAltitude
 import IGC: A_record, B_record
+import IGC: C_record_task_info, C_record_waypoint_info
 import IGC: read_igc_file
 
 using Dates
@@ -21,7 +22,11 @@ using Dates
 
     @testset "parse A record" begin
         line = "AXXXABC FLIGHT:1\r\n"
-        expected_result = A_record("XXX", "ABC", "FLIGHT:1")
+        expected_result = A_record(
+            "XXX",  # manufacturer
+            "ABC",  # id
+            "FLIGHT:1"  # id_addition
+        )
         @test parse(A_record, line) == expected_result
     end
 
@@ -63,6 +68,30 @@ using Dates
         end
         # @test length(igcdoc.errors) == 0  # when every line will be parsed correctly
     end
-    
+
+
+    @testset "decode_C_record_task_info" begin
+        line = "C150701213841160701000102 500K Tri\r\n"
+        expected_result = C_record_task_info(
+            IGCDate(2001, 7, 15),  # declaration_date
+            IGCTime(21, 38, 41),  # declaration_time
+            IGCDate(2001, 7, 16),  # flight_date
+            "0001",  # number
+            2,  # num_turnpoints
+            "500K Tri"  # description
+        )
+        # @test parse(C_record, line) == expected_result
+    end
+
+
+    @testset "decode_C_record_waypoint_info" begin
+        line = "C5111359N00101899W Lasham Clubhouse\r\n"
+        expected_result = C_record_waypoint_info(
+            IGCLatitude(51.18931666666667),  # latitude
+            IGCLongitude(-1.03165),  # longitude
+            "Lasham Clubhouse"  # description
+        )
+        # @test parse(C_record, line) == expected_result
+    end
     
 end

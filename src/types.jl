@@ -56,6 +56,23 @@ struct B_record <: Abstract_IGC_Record
 end
 
 
+abstract type Abstract_C_record <: Abstract_IGC_Record end
+
+struct C_record_task_info <: Abstract_C_record
+    declaration_date::IGCDate
+    declaration_time::IGCTime
+    flight_date::IGCDate
+    number::String
+    num_turnpoints::Int64
+    description::String
+end
+
+struct C_record_waypoint_info <: Abstract_C_record
+    latitude::IGCLatitude
+    longitude::IGCLongitude
+    description::String
+end
+
 struct IGCDocument
     B_records::Vector{B_record}
     errors::Vector{IGCParseException}
