@@ -1,25 +1,6 @@
 import Base: parse
 
-function parse(::Type{A_record}, line::String)
-    @assert line[1] == 'A'
-    id_addition = length(line) == 7 ? "" : strip(line[8:end])
-    return A_record(line[2:4], line[5:7], id_addition)
-end
-
-function parse(::Type{B_record}, line::String)
-    @assert line[1] == 'B'
-
-    return B_record(
-        parse(IGCTime, line[2:7]),
-        parse(IGCLatitude, line[8:15]),
-        parse(IGCLongitude, line[16:24]),
-        IGCFixValidity(line[25]),
-        parse(IGCPressureAltitude, line[26:30]),
-        parse(IGCGpsAltitude, line[31:35]),
-        35,
-        strip(line[36:end])
-    )
-end
+# ========================================
 
 function parse(::Type{IGCTime}, s::String)
     return IGCTime(Time(s, IGC_TIME_FMT))
@@ -86,6 +67,54 @@ end
 function parse(::Type{IGCGpsAltitude}, s::String)
     return IGCGpsAltitude(parse(Int, s))
 end
+
+# ========================================
+
+function parse(::Type{A_record}, line::String)
+    @assert line[1] == 'A'
+    id_addition = length(line) == 7 ? "" : strip(line[8:end])
+    return A_record(line[2:4], line[5:7], id_addition)
+end
+
+function parse(::Type{B_record}, line::String)
+    @assert line[1] == 'B'
+
+    return B_record(
+        parse(IGCTime, line[2:7]),
+        parse(IGCLatitude, line[8:15]),
+        parse(IGCLongitude, line[16:24]),
+        IGCFixValidity(line[25]),
+        parse(IGCPressureAltitude, line[26:30]),
+        parse(IGCGpsAltitude, line[31:35]),
+        35,
+        strip(line[36:end])
+    )
+end
+
+function parse(::Type{Abstract_C_record}, line::String)
+    @assert line[1] == 'C'
+
+    istaskinfo = isdigit(line[9])
+
+    if istaskinfo
+        return C_record_task_info(
+            parse(IGCDate, line[2:7]),
+            parse(IGCTime, line[8:13]),
+            parse(IGCDate, line[14:19]),
+            line[20:23],
+            parse(Int64, line[24:25]),
+            strip(line[26:end])
+        )
+    else
+        return C_record_waypoint_info(
+            parse(IGCLatitude, line[2:9]),
+            parse(IGCLongitude, line[10:18]),
+            strip(line[19:end])
+        )
+    end
+end
+
+# ========================================
 
 module ParsingMode
     @enum(ParsingModeEnum, STRICT, UNSTRICT)
