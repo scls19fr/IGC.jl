@@ -2,7 +2,7 @@ using IGC
 using Test
 import IGC: IGCLatitude, IGCLongitude, IGCDate, IGCTime, IGCFixValidity, IGCPressureAltitude, IGCGpsAltitude
 import IGC: A_record, B_record
-import IGC: C_record_task_info, C_record_waypoint_info
+import IGC: Abstract_C_record, C_record_task_info, C_record_waypoint_info
 import IGC: read_igc_file
 
 using Dates
@@ -69,7 +69,6 @@ using Dates
         # @test length(igcdoc.errors) == 0  # when every line will be parsed correctly
     end
 
-
     @testset "decode_C_record_task_info" begin
         line = "C150701213841160701000102 500K Tri\r\n"
         expected_result = C_record_task_info(
@@ -80,9 +79,8 @@ using Dates
             2,  # num_turnpoints
             "500K Tri"  # description
         )
-        # @test parse(C_record, line) == expected_result
+        @test parse(Abstract_C_record, line) == expected_result
     end
-
 
     @testset "decode_C_record_waypoint_info" begin
         line = "C5111359N00101899W Lasham Clubhouse\r\n"
@@ -91,7 +89,7 @@ using Dates
             IGCLongitude(-1.03165),  # longitude
             "Lasham Clubhouse"  # description
         )
-        # @test parse(C_record, line) == expected_result
+        @test parse(Abstract_C_record, line) == expected_result
     end
     
 end
