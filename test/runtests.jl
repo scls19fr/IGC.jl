@@ -91,5 +91,4 @@ using Dates
         )
         @test parse(Abstract_C_record, line) == expected_result
     end
-    
 end
