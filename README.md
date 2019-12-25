@@ -10,7 +10,7 @@ IGC file format is defined using [Technical Specification for IGC-approved GNSS 
 
 ## Usage
 
-### Read IGC file
+### Read an IGC file
 
 ```julia
 julia> using IGC
@@ -98,6 +98,20 @@ julia> DataFrame(records)
 │ 1   │ 16:02:45 │ IGCLatitude(51.1188) │ IGCLongitude(-1.82167) │ Fix3D    │ IGCPressureAltitude(288) │ IGCGpsAltitude(429) │
 │ 2   │ 16:02:50 │ IGCLatitude(51.1189) │ IGCLongitude(-1.82138) │ Fix3D    │ IGCPressureAltitude(290) │ IGCGpsAltitude(432) │
 │ 3   │ 16:02:55 │ IGCLatitude(51.119)  │ IGCLongitude(-1.82035) │ Fix3D    │ IGCPressureAltitude(290) │ IGCGpsAltitude(430) │
+```
+
+### Read an IGC file to a simple Vector of records
+
+```julia
+julia> parse(Vector{Abstract_IGC_record}, read(fname, String))
+46-element Array{Abstract_IGC_record,1}:
+ IGC.A_record("XXX", "ABC", "FLIGHT:1")
+ IGC.H_record_FiXAccuracy('F', 35)
+ IGC.H_record_DaTE('F', 2001-07-16)
+ ⋮
+ IGC.G_record("SKTO5427FGTNUT5621WKTC6714FT8957FGMKJ134527FGTR6751")
+ IGC.G_record("K2489IERGNV3089IVJE39GO398535J3894N358954983FTGY546")
+ IGC.G_record("12560DJUWT28719GTAOL5628FGWNIST78154INWTOLP7815FITN")
 ```
 
 ### Write an IGC record to a string
