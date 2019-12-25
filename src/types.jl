@@ -434,6 +434,7 @@ mutable struct IGCDocument
     parsing_mode::ParsingMode.ParsingModeEnum
     #dt_first::ZonedDateTime
     #dt_last::ZonedDateTime
+    all_records::Vector{Abstract_IGC_record}
 end
 IGCDocument(; stream = devnull, eol = EOL_DEFAULT, parsing_mode=ParsingMode.DEFAULT) = IGCDocument(
     A_record(),
@@ -455,6 +456,7 @@ IGCDocument(; stream = devnull, eol = EOL_DEFAULT, parsing_mode=ParsingMode.DEFA
     parsing_mode,
     #ZonedDateTime(0, TZ),
     #ZonedDateTime(0, TZ)
+    Abstract_IGC_record[]
 )
 
 have_task_declared(igcdoc::IGCDocument) = igcdoc.task.info.declaration.date != EmptyDate()

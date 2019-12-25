@@ -593,14 +593,14 @@ end
 
 # ========================================
 
-function read(fname::AbstractString, ::Type{IGCDocument}; parsing_mode=ParsingMode.DEFAULT)
+function read(fname::AbstractString, ::Type{IGCDocument}; parsing_mode=ParsingMode.DEFAULT, store_all_records=DEFAULT_STORE_ALL_RECORDS)
     stream = open(fname)
-    return parse(IGCDocument, stream, parsing_mode=parsing_mode)
+    return parse(IGCDocument, stream, parsing_mode=parsing_mode, store_all_records=store_all_records)
 end
 
-function parse(::Type{IGCDocument}, s; parsing_mode=ParsingMode.DEFAULT)
+function parse(::Type{IGCDocument}, s; parsing_mode=ParsingMode.DEFAULT, store_all_records=DEFAULT_STORE_ALL_RECORDS)
     stream = IOBuffer(s)
-    return parse(IGCDocument, stream::IO, parsing_mode=parsing_mode)
+    return parse(IGCDocument, stream::IO, parsing_mode=parsing_mode, store_all_records=store_all_records)
 end
 
 function parse(::Type{Abstract_IGC_record}, line::String)
@@ -741,11 +741,14 @@ end
 
 # ========================================
 
-function parse(::Type{IGCDocument}, stream::IO; parsing_mode=ParsingMode.STRICT)
+function parse(::Type{IGCDocument}, stream::IO; parsing_mode=ParsingMode.STRICT, store_all_records=DEFAULT_STORE_ALL_RECORDS)
     igcdoc = IGCDocument(parsing_mode=parsing_mode)
     for (line_id, line) in enumerate(eachline(stream))
         try
             rec = parse(Abstract_IGC_record, line)
+            if store_all_records
+                push!(igcdoc.all_records, rec)
+            end
             update!(igcdoc, rec)
         catch e
             exc = IGCParseException(line_id, line, e)

@@ -1,6 +1,7 @@
 const DEFAULT_SOURCE = 'F'
 const EOL_DEFAULT = "\n"
 const TZ = tz"UTC"
+const DEFAULT_STORE_ALL_RECORDS = false
 
 const SINGLE_INSTANCE_DATA_RECORDS_CHARS = Set(['A', 'H', 'I', 'J', 'C', 'D', 'G'])
 const MULTIPLE_INSTANCE_DATA_RECORDS_CHARS = Set(['B', 'E', 'F', 'K', 'L'])

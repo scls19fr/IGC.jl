@@ -580,7 +580,7 @@
 
     @testset "read igc file" begin
         fname = joinpath("data", "example.igc")
-        igcdoc = read(fname, IGCDocument)
+        igcdoc = read(fname, IGCDocument, store_all_records=true)
 
         for err in igcdoc.errors
             # println(err)
@@ -699,6 +699,9 @@
         @test length(records) == 2
         @test records[1] == L_record("XXX", "RURITANIAN STANDARD NATIONALS DAY 1")
         @test records[2] == L_record("XXX", "FLIGHT TIME: 4:14:25, TASK SPEED:58.48KTS")
+
+        # all_records (in file order)
+        @test length(igcdoc.all_records) == 46
 
         # End of file / statistics
         #@test igcdoc.dt_first == ZonedDateTime(2001, 7, 16, 16, 2, 24, TZ)
