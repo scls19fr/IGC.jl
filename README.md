@@ -103,7 +103,7 @@ julia> DataFrame(records)
 ### Read an IGC file to a simple Vector of records
 
 ```julia
-julia> parse(Vector{Abstract_IGC_record}, read(fname, String))
+julia> records = parse(Vector{Abstract_IGC_record}, read(fname, String))
 46-element Array{Abstract_IGC_record,1}:
  IGC.A_record("XXX", "ABC", "FLIGHT:1")
  IGC.H_record_FiXAccuracy('F', 35)
