@@ -70,6 +70,7 @@ julia> DataFrame(igcdoc.fix_records)
 
 ```julia
 julia> using IGC
+
 julia> parse(Abstract_IGC_record, "B1602455107126N00149300WA002880042919509020")
 IGC.B_record(Time(16:02:45), IGC.IGCLatitude(51.118766666666666), IGC.IGCLongitude(-1.8216666666666668), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(288), IGC.IGCGpsAltitude(429), 36, "19509020", IGC.IGCExtension[])
 ```
@@ -78,20 +79,34 @@ IGC.B_record(Time(16:02:45), IGC.IGCLatitude(51.118766666666666), IGC.IGCLongitu
 
 ```julia
 julia> using IGC
-julia> parse(Vector{Abstract_IGC_record}, """B1602455107126N00149300WA002880042919509020
-B1602505107134N00149283WA002900043221009015
-B1602555107140N00149221WA002900043020009012""")
+
+julia> records = parse(Vector{Abstract_IGC_record}, """B1602455107126N00149300WA002880042919509020
+       B1602505107134N00149283WA002900043221009015
+       B1602555107140N00149221WA002900043020009012""")
 3-element Array{IGC.B_record,1}:
- IGC.B_record(Time(16:02:45), IGC.IGCLatitude(51.118766666666666), IGC.IGCLongitude(-1.8216666666666668), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(288), IGC.IGCGpsAltitude(429), 36, "19509020", IGC.IGCExtension[])
- IGC.B_record(Time(16:02:50), IGC.IGCLatitude(51.1189), IGC.IGCLongitude(-1.8213833333333334), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(290), IGC.IGCGpsAltitude(432), 36, "21009015", IGC.IGCExtension[])
- IGC.B_record(Time(16:02:55), IGC.IGCLatitude(51.119), IGC.IGCLongitude(-1.82035), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(290), IGC.IGCGpsAltitude(430), 36, "20009012", IGC.IGCExtension[])
+ IGC.B_record(16:02:45, IGC.IGCLatitude(51.118766666666666), IGC.IGCLongitude(-1.8216666666666668), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(288), IGC.IGCGpsAltitude(429), 36, "19509020", IGC.IGCExtension[])
+ IGC.B_record(16:02:50, IGC.IGCLatitude(51.1189), IGC.IGCLongitude(-1.8213833333333334), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(290), IGC.IGCGpsAltitude(432), 36, "21009015", IGC.IGCExtension[])
+ IGC.B_record(16:02:55, IGC.IGCLatitude(51.119), IGC.IGCLongitude(-1.82035), IGC.FixValidity.Fix3D, IGC.IGCPressureAltitude(290), IGC.IGCGpsAltitude(430), 36, "20009012", IGC.IGCExtension[])
+
+julia> using DataFrames
+
+julia> DataFrame(records)
+3×9 DataFrame. Omitted printing of 3 columns
+│ Row │ time     │ latitude             │ longitude              │ validity │ pressure_alt             │ gps_alt             │
+│     │ Dates…   │ IGC.IGCLatitude      │ IGC.IGCLongitude       │ IGC…     │ IGC.IGCPressureAltitude  │ IGC.IGCGpsAltitude  │
+├─────┼──────────┼──────────────────────┼────────────────────────┼──────────┼──────────────────────────┼─────────────────────┤
+│ 1   │ 16:02:45 │ IGCLatitude(51.1188) │ IGCLongitude(-1.82167) │ Fix3D    │ IGCPressureAltitude(288) │ IGCGpsAltitude(429) │
+│ 2   │ 16:02:50 │ IGCLatitude(51.1189) │ IGCLongitude(-1.82138) │ Fix3D    │ IGCPressureAltitude(290) │ IGCGpsAltitude(432) │
+│ 3   │ 16:02:55 │ IGCLatitude(51.119)  │ IGCLongitude(-1.82035) │ Fix3D    │ IGCPressureAltitude(290) │ IGCGpsAltitude(430) │
 ```
 
 ### Write an IGC record to a string
 
 ```julia
 julia> using Dates
+
 julia> using IGC: B_record, IGCLatitude, IGCLongitude, FixValidity, IGCPressureAltitude, IGCGpsAltitude
+
 julia> rec = B_record(Time(16, 02, 45), IGCLatitude(51.118766666666666), IGCLongitude(-1.8216666666666668), FixValidity.Fix3D, IGCPressureAltitude(288), IGCGpsAltitude(429), 36, "19509020")
 
 julia> rec = B_record(Time(16, 02, 45), IGCLatitude(51.118766666666666), IGCLongitude(-1.8216666666666668), FixValidity.Fix3D, IGCPressureAltitude(288), IGCGpsAltitude(429), 36, "19509020")
