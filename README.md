@@ -8,6 +8,13 @@ Be aware that this library is alpha version (ie it shouldn't be considered as a 
 
 IGC file format is defined using [Technical Specification for IGC-approved GNSS Flight Recorder](http://www.ukiws.demon.co.uk/GFAC/documents/tech_spec_gnss.pdf) from [FAI INTERNATIONAL GLIDING COMMISSION](https://www.fai.org/commission/igc)
 
+## Installation
+
+```julia
+julia> using Pkg
+julia> Pkg.clone("https://github.com/scls19fr/IGC.jl")
+```
+
 ## Usage
 
 ### Read an IGC file
