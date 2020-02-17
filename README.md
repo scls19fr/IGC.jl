@@ -2,7 +2,7 @@
 
 # IGC
 
-A Julia library to interact with IGC file.
+A [Julia](https://julialang.org/) library to interact with IGC file.
 
 Be aware that this library is alpha version (ie it shouldn't be considered as a release version).
 
